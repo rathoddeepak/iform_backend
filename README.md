@@ -1,7 +1,7 @@
 # iForm | Golang Backend
 
-Demo: [visit](https://rathoddeepak.github.io/iform).
-Postman: [documentation]([https://rathoddeepak.github.io/iform](https://documenter.getpostman.com/view/5023754/2sA3Qza8Pe)).
+Demo: [visit](https://rathoddeepak.github.io/iform) <br />
+Postman: [documentation](https://rathoddeepak.github.io/iform](https://documenter.getpostman.com/view/5023754/2sA3Qza8Pe))
 
 
 ## Steps to run project
