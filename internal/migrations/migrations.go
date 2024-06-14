@@ -11,10 +11,9 @@ package migrations;
 import (
 	"time"
 
+	dbm "iform/pkg/managers/db"
+
 	"github.com/google/uuid"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
-	"gorm.io/gorm/schema"
 )
 
 type User struct {
@@ -49,14 +48,14 @@ type Page struct {
 }
 
 type Question struct {
-	ID            int64     `gorm:"primaryKey;autoIncrement"`
-	PageID        int64     `gorm:"not null"`
-	RelativeOrder int16     `gorm:"default:0"`
-	QuestionText  string    `gorm:"not null"`
-	QuestionType  string    `gorm:"not null"`
-	Validations   schema.JSON `gorm:"default:'{}'"`
-	Config        schema.JSON `gorm:"default:'{}'"`
-	IsActive      bool      `gorm:"default:true"`
+	ID            int64       `gorm:"primaryKey;autoIncrement"`
+	PageID        int64       `gorm:"not null"`
+	RelativeOrder int16       `gorm:"default:0"`
+	QuestionText  string      `gorm:"not null"`
+	QuestionType  string      `gorm:"not null"`
+	Validations   interface{} `gorm:"type:jsonb;default:'{}'"`
+	Config        interface{} `gorm:"type:jsonb;default:'{}'"`
+	IsActive      bool        `gorm:"default:true"`
 	SubmissionAnswers []SubmissionAnswer `gorm:"foreignKey:QuestionID"`
 }
 
@@ -74,7 +73,7 @@ type SubmissionAnswer struct {
 	ID           int64     `gorm:"primaryKey;autoIncrement"`
 	SubmissionID int64     `gorm:"not null"`
 	QuestionID   int64     `gorm:"not null"`
-	Answer       schema.JSON `gorm:"not null"`
+	Answer       interface{} `gorm:"type:jsonb;not null"`
 }
 
 type Session struct {
@@ -87,8 +86,9 @@ type Session struct {
 /**
  * Create Tables and Updates tables for database
 */ 
-func StartAutoMigrate() {
+func StartAutoMigrate() error {
 	db := dbm.GetConnection();
 	// Migrate the schema
-	db.AutoMigrate(&User{}, &Form{}, &Page{}, &Question{}, &Submission{}, &SubmissionAnswer{}, &Session{})
+	err := db.AutoMigrate(&User{}, &Form{}, &Page{}, &Question{}, &Submission{}, &SubmissionAnswer{}, &Session{})
+	return err;
 }
