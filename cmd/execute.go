@@ -10,6 +10,7 @@ import (
 
 const (
 	iform         = "iform"
+	migrateDatabase = "migrate"
 	startServer   = "start"
 	showConfig    = "config"
 )
@@ -18,7 +19,8 @@ const (
 func getDefaultMessage() string {
 return `
 commands:
--iform start          -> start the Server 
+-iform start          -> start the Server
+-iform migrate        -> migrates database
 -iform config         -> show the current environment 
 `;
 }
@@ -34,6 +36,9 @@ func Execute() {
 
 		case startServer:
 			boot.InitServer()
+
+		case migrateDatabase:
+			boot.MigrateDatabase()
 
 		case showConfig:
 			fmt.Println(cacheconf.GetCurrentConfig())

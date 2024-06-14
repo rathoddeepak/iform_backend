@@ -3,17 +3,16 @@ package boot;
 import (
 	"github.com/gin-gonic/gin"
 
-	"iform/pkg/managers/db"
+	"iform/internal/migrations"
+	"iform/pkg/managers/db"	
 	"iform/config"
 	"iform/routes"
 
 	"log"
 )
 
-func InitServer () {
-	currentConfig := config.GetInstance();
-
-	// Step 1: Connect to database 	
+func initDB () *config.CacheConfig {
+	currentConfig := config.GetInstance();	
 	db.InitConnection(currentConfig.SQLDriver, currentConfig.StringConnection);
 
 	if currentConfig.Debug {
@@ -24,6 +23,13 @@ func InitServer () {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
+	return currentConfig;
+}
+
+func InitServer () {
+	// Step 1: Connect to database
+	currentConfig := initDB();
+
 	// Step 2: Init Routes
 	server := routes.InitRoutes();
 
@@ -33,4 +39,17 @@ func InitServer () {
 	if err != nil && currentConfig.Debug {
 		log.Printf("Server Running on port: %s \n", currentConfig.AppPort)
 	}
+}
+
+func MigrateDatabase () {
+	
+	initDB();
+
+	err := migrations.StartAutoMigrate();
+	if err != nil {
+		log.Fatal("Unable to migrate database: ", err);
+	} else {
+		log.Println("Database migrated successfully!");
+	}
+
 }
