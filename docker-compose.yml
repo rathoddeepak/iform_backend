@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: iform_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  server:    
+    container_name: go-server
+    image: francescoxx/go-app:1.0.1
+    build: .
+    environment:
+      DATABASE_URL: "host=db port=5432 user=postgres password=postgres dbname=iform_db sslmode=disable"
+    ports:
+      - "8888:8888"
+    depends_on:
+      - db
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "8887:8080"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:

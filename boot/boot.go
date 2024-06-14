@@ -9,11 +9,12 @@ import (
 	"iform/routes"
 
 	"log"
+	"os"
 )
 
 func initDB () *config.CacheConfig {
 	currentConfig := config.GetInstance();	
-	db.InitConnection(currentConfig.SQLDriver, currentConfig.StringConnection);
+	db.InitConnection(currentConfig.SQLDriver, os.Getenv("DATABASE_URL"));
 
 	if currentConfig.Debug {
 		log.Println("Databse Connection Successful")
