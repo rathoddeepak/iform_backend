@@ -6,9 +6,12 @@ Postman: [documentation](https://rathoddeepak.github.io/iform](https://documente
 
 ## Steps to run project
 
-Step 1: install go packages by running `go mod tidy`
+Step 1: Start development server with `docker-compose up --build`
+  - Server will be running at port `http://localhost:8887/`
 
-Step 2: Start developmet server with `go run main.go -iform start`
+Step 2: To inspect database use adminer at `http://localhost:8887/`
+  - Login with `user=postgres password=postgres dbname=iform_db`
+  - Only for test, will be added to secrets later
 
 ### File Structure
 
